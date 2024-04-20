@@ -14,6 +14,34 @@ public:
     virtual std::string commpressDirectory(std::string dirPath) = 0;
 };
 
+
+class ZipCompression: public ICompression
+{
+public:
+    virtual std::string compressFile(std::string filePath) override
+    {
+        return "zip file: " + filePath;
+    }
+    virtual std::string commpressDirectory(std::string dirPath) override
+    {
+        return "zip dir: " + dirPath;
+    }
+};
+
+class RarCompression : public ICompression
+{
+public:
+    virtual std::string compressFile(std::string filePath) override
+    {
+        return "rar file: " + filePath;
+    }
+    virtual std::string commpressDirectory(std::string dirPath) override
+    {
+        return "rar dir: " + dirPath;
+    }
+};
+
+
 class Compressor
 {
 private:
@@ -47,8 +75,12 @@ public:
 
 int main()
 {
-    
+    ICompression* zip = new ZipCompression{};
+    ICompression* rar = new RarCompression{};
 
+    Compressor* compressor = new Compressor{ zip };
+    compressor->setCompression(rar);
 
+    std::cout << compressor->makeArchive("test.docx", ItemType::FILE_TYPE);
 }
 
